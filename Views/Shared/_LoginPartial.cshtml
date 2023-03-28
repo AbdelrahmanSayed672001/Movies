@@ -1,0 +1,53 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+
+<link href="~/SystemStyle/assets/vendor/aos/aos.css" rel="stylesheet">
+<link href="~/SystemStyle/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="~/SystemStyle/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+<link href="~/SystemStyle/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+<link href="~/SystemStyle/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+<link href="~/SystemStyle/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+<link href="~/SystemStyle/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+<!-- Template Main CSS File -->
+<link href="~/SystemStyle/assets/css/style.css" rel="stylesheet">
+
+<ul id="navbar" class="navbar order-last order-lg-0">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        if (UserManager.GetUserAsync(User).Result.ProfileImg != null)
+        {
+            <li class="nav-item">
+                <img class="rounded-circle" id="profileImg" src="data:image/*;base64,@(Convert.ToBase64String(UserManager.GetUserAsync(User).Result.ProfileImg))" style="height: 40px;width: 40px;/*margin-left: 60px;*/" alt="Profile Image" />
+
+            </li>
+        }
+        else
+        {
+            <li class="nav-item">
+
+                <img class="rounded-circle" id="profileImg" src="~/Images/avatar-male.jpg" style="height: 40px;width: 40px;/*margin-left: 60px;*/" alt="Profile Image" />
+            </li>
+        }
+
+        <li class="nav-item">
+            <a class="nav-link scrollto" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity.Name!</a>
+        </li>
+        <li class="nav-item">
+            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                <button type="submit" class="btn btn-danger" style="margin-left:20px;">Logout</button>
+            </form>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link scrollto" asp-area="Identity" asp-page="/Account/Register">Register</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link scrollto " asp-area="Identity" asp-page="/Account/Login">Login</a>
+        </li>
+    }
+</ul>

@@ -1,0 +1,127 @@
+﻿@using Movies.ViewModel
+@model MovieViewModel
+
+@{
+    ViewBag.Title = "AddMovie";
+
+}
+
+<section class="row justify-content-between">
+    <div class="col-md-4">
+        <form method="post" enctype="multipart/form-data">
+
+            <div class="form-group">
+                <label asp-for="Title" class="text-muted"></label>
+                <input type="Text" asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Genre" class="text-muted"></label>
+                <input type="Text" asp-for="Genre" class="form-control" />
+                <span asp-validation-for="Genre" class="text-danger"></span>
+            </div>
+
+            <div class="form-group w-50">
+                <label asp-for="CreatedDate.Year" class="text-muted"></label>
+                <input type="number" asp-for="CreatedDate.Year" class="form-control" min="1990" max="@DateTime.Now.Year" />
+                <span asp-validation-for="CreatedDate.Year" class="text-danger"></span>
+            </div>
+
+            <div class="form-group w-50">
+                <div>
+                    <label asp-for="Like" class="text-muted"></label>
+                    <input type="number" asp-for="Like" class="form-control" value="0" disabled />
+                    <span asp-validation-for="Like" class="text-danger"></span>
+                </div>
+                <div>
+                    <label asp-for="Dislike" class="text-muted"></label>
+                    <input type="number" asp-for="Dislike" class="form-control" value="0" disabled />
+                    <span asp-validation-for="Dislike" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Description" class="text-muted"></label>
+                <textarea asp-for="Description" class="form-control" rows="5" style="resize:none;"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="custom-file mt-5">
+
+                @*@{
+                    if (Model.Poster != null)
+                    {
+                        <img id="poster" src="data:image/*;base64,@(Convert.ToBase64String(Model.Poster))" style="height: 500px;width: 500px;margin-left: 60px;" alt="Poster Image" />
+                    }
+                    else
+                    {
+                        <img id="profileImg" src=" " style="height: 200px;width: 200px;margin-left: 60px;" alt="Profile Image" />
+
+                    }
+                }*@
+
+                <div class="custom-file mt-2">
+                    <input asp-for="Poster"
+                           class="custom-file-input"
+                           type="file"
+                           accept="image/*"
+                           onchange=" document.getElementById('poster').src=window.URL.createObjectURL(this.files[0])  " />
+
+                    @*<label class="custom-file-label" asp-for="Poster"> Select a poster image</label>*@
+
+                    <span asp-validation-for="Poster" class="text-danger"></span>
+
+
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-4">
+                <i class="bi bi-check-circle"></i>
+                Save
+            </button>
+            <a asp-action="Index" asp-controller="Home" class="btn btn-outline-secondary mt-4">
+                <i class="bi bi-x-circle"></i>
+                Cancel
+            </a>
+        </form>
+    </div>
+
+    @*<div class="col-md-4">
+    <div id="poster-container" >
+    <img src="data:image/*;base64,@(Convert.ToBase64String(Model.Poster))")" alt="Poster" style="max-width:500px;max-height:500px" />
+    </div>
+    </div>*@
+</section>
+
+
+@section Scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(document).ready(function() {
+            $('#Poster').on('change', function() {
+                var selectedFile = $(this).val().split('\\').pop();
+                $(this).siblings('label').text(selectedFile);
+
+                var image = window.URL.createObjectURL(this.files[0]);
+
+                var posterContatiner = $('#poster-container');
+                posterContatiner.removeClass('d-none');
+                posterContatiner.find('img').attr('src', image);
+            });
+
+
+            $('#Year').datepicker({
+                format: 'yyyy',
+                viewMode: 'years',
+                minViewMode: 'years',
+                autoclose: true,
+                startDate: new Date('1990-1-1'),
+                endDate: new Date()
+            });
+
+        });
+    </script>
+}

@@ -1,0 +1,66 @@
+﻿@model List<Movie>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<!-- ======= Services Section ======= -->
+<section id="services" class="services">
+    <div class="container" data-aos="fade-up">
+
+        <div class="section-title">
+            <h2>All movies</h2>
+            <p>Check our Movies</p>
+            @{
+                if (User.IsInRole("Admin"))
+                {
+                    <a href="/Movie/AddMovie" class="btn btn-primary">Add a new movie</a>
+                }
+            }
+        </div>
+
+        <div class="row">
+            @{
+                if (!Model.Any())
+                {
+                    <div class="alert alert-danger ">There are no movies</div>
+                }
+                else
+                {
+
+                    foreach (var item in Model)
+                    {
+                        <div class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
+                            <div class="icon-box" style="padding:0;border:none;">
+                                <img style="width:272px;height:266px;" src="data:image/*;base64,@(Convert.ToBase64String(item.Poster))" />
+                                <h4><a href="">@item.Title   @item.CreatedDate.Year</a></h4>
+                                <h6 style="font-style: italic;">@item.Genre</h6>
+                                <p>@item.Description</p>
+                                <div>
+                                    <div>
+                                        <a href="/Home/Like/@item.Id" class="btn btn-primary">
+                                            <i class="bi bi-hand-thumbs-up"></i>
+                                            <p>@item.Like</p>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <a href="/Home/Dislike/@item.Id" class="btn btn-primary">
+                                        <i class="bi bi-hand-thumbs-down"></i>
+                                        <p>@item.Dislike</p>
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>
+                    }
+                }
+
+
+            }
+
+        </div>
+
+    </div>
+</section><!-- End Services Section -->
